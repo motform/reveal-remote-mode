@@ -66,7 +66,8 @@
 (defun reveal-remote-dispose ()
   "Disposes the Reveal window."
   (interactive)
-  (reveal-remote--submit-command "'(dispose)"))
+  (when (y-or-n-p "Are you sure you want to dispose of the Reval window? ")
+    (reveal-remote--submit-command "'(dispose)")))
 
 ;;; Minor Mode:
 
