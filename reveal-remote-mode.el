@@ -37,6 +37,7 @@
 (require 'cider-eval)
 
 ;;; Customization
+
 (defgroup reveal-remote nil
   "Reveal-remote functions and settings."
   :group 'tools
@@ -51,22 +52,21 @@
 
 (defun reveal-remote--submit-command (command)
   "Submit contents COMMAND as val to a `:vlaaad.reveal/command' map."
-  (cider-interactive-eval ; how do we make sure this is in the correct env?
-   (format "{:vlaaad.reveal/command %s}" command)))
+  (let ((form (format "{:vlaaad.reveal/command %s}" command)))
+    (when (not (cider-interactive-eval form))
+      (message "Unable to send form. Are you sure you are connected to an nrepl through CIDER in this buffer?"))))
 
 ;;; Interactive:
 
 (defun reveal-remote-clear ()
   "Clear the Reveal window."
   (interactive)
-  (when (not (reveal-remote--submit-command "'(clear-output)"))
-    (message "Unable to send form. Are you sure you are connected to an nrepl through CIDER in this buffer?")))
+  (reveal-remote--submit-command "'(clear-output)"))
 
 (defun reveal-remote-dispose ()
   "Disposes the Reveal window."
   (interactive)
-  (when (y-or-n-p "Are you sure you want to dispose of the Reveal window? ")
-    (reveal-remote--submit-command "'(dispose)")))
+  (reveal-remote--submit-command "'(dispose)"))
 
 ;;; Minor Mode:
 
