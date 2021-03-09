@@ -52,9 +52,9 @@
 ;;; Internal:
 
 (defun reveal-remote--submit-command (command)
-  "Submit contents COMMAND as val to a `:vlaaad.reveal/command' map."
+  "Submit map with key `:vlaaad.reveal/command' and COMMAND as val."
   (let ((form (format "{:vlaaad.reveal/command %s}" command)))
-    (when (not (cider-interactive-eval form))
+    (when (not (cider-interactive-eval form)) ; cider-interactive-eval returns nils on fail
       (message "Unable to send form. Are you sure you are connected to an nrepl through CIDER in this buffer?"))))
 
 ;;; Interactive:
@@ -70,11 +70,23 @@
   (when (y-or-n-p "Are you sure you want to dispose of the Reval window? ")
     (reveal-remote--submit-command "'(dispose)")))
 
+(defun reveal-remote-submit ()
+  "Submit value at point to output panel.
+Ignores, and thus prints, data that might be a valid reveal command map.
+
+NOTE, unless :env is set forms will be evaluated in the `vlaaad.reveal.ext',
+NOT the namespace of the buffer."
+  (interactive)
+  (reveal-remote--submit-command
+   (format "'(submit %s)" (cider-last-sexp))))
+
 ;;; Minor Mode:
 
 (defvar reveal-remote-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "l") #'reveal-remote-clear)
+    (define-key map (kbd "q") #'reveal-remote-dispose)
+    (define-key map (kbd "e") #'reveal-remote-submit)
     map)
   "Keymap for reveal-remote-mode commands after `reveal-remote-mode-keymap-prefix'.")
 (fset 'reval-remote-command-map reveal-remote-command-map)
