@@ -4,10 +4,10 @@
 
 ;; Author: Love Lagerkvist
 ;; URL: https://github.com/motform/reveal-remote-mode
-;; Version: 210308
-;; Package-Requires: ((emacs "25.1"))
+;; Version: 210309
+;; Package-Requires: ((emacs "25.1") (clojure-mode "5.9") (cider "0.24.0"))
 ;; Created: 2021-03-08
-;; Keywords: tools convenience
+;; Keywords: tools convenience clojure cider
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -28,9 +28,13 @@
 
 ;;; Commentary:
 
-;; A simple remote control for Reveal.
+;; A simple remote control for Reveal (https://vlaaad.github.io/reveal/).
+;; Provides functions for submitting values, opening views and controlling the window.
+;;
 ;; Currently requires CIDER and a pre-configured nrepl connection,
-;; but my goal is to make this agnostic/usable with most repl connections.
+;; but my goal is to make this work with inf-clojure as well.
+;;
+;; Tested against Reveal 1.3.196
 
 ;;; Code:
 
