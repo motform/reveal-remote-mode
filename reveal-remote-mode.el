@@ -52,6 +52,14 @@
   :group 'reveal-remote
   :type  'string)
 
+(defcustom reveal-remote-mode-eval-in-buffer-ns t
+  "If non-nil (default), evaluates forms in the current buffer's namespace.
+
+By default, Reveal evaluates any forms it encounters in vlaaad.reveal.ext,
+which means that any unknown symbols will result in compile errors."
+  :group 'reveal-remote
+  :type  'boolean)
+
 (defcustom reveal-remote-views
   '("view:table"
     "view:pie-chart"
@@ -68,19 +76,30 @@
 
 ;;; Internal:
 
-(defun reveal-remote--submit-command (command)
-  "Submit map with key `:vlaaad.reveal/command' and COMMAND as val."
-  (let ((form (format "{:vlaaad.reveal/command %s}" command)))
-    (when (not (cider-interactive-eval form)) ; cider-interactive-eval returns nils on fail
+(defun reveal-remote--eval-command (command &optional arg)
+  "Evaluate the Reveal command form with `ARG' applied to `COMMAND'."
+  (let* ((command-map (reveal-remote--build-command-map command arg))
+         (success-p   (cider-interactive-eval command-map)))  ; cider-interactive-eval returns nils on fail
+    (when (not success-p)
       (error "Unable to send form.  Are you sure you are connected to an nrepl through CIDER in this buffer?"))))
+
+(defun reveal-remote--build-command-map (command &optional arg)
+  "Return the finished Reveal command map by setting flags, adding ARG and boilerplate to COMMAND."
+  (format "{:vlaaad.reveal/command '((requiring-resolve 'vlaaad.reveal.ext/%s) %s) %s}"
+          command
+          (or arg "")
+          (when reveal-remote-mode-eval-in-buffer-ns ":ns *ns*"))) ; not sure how robust it is to call *ns*
+
+(reveal-remote--build-command-map "clear-window")
 
 (defun reveal-remote--open-view (value)
   "Select and open view with VALUE."
   (let ((view (completing-read "Select view: " reveal-remote-views nil :require-match)))
-    (reveal-remote--submit-command
-     (format "'(open-view {:fx/type action-view
-                           :action :vlaaad.reveal.action/%s
-                           :value %s})"
+    (reveal-remote--eval-command
+     "open-view"
+     (format "{:fx/type  vlaaad.reveal.ext/action-view
+                :action  :vlaaad.reveal.action/%s
+                :value   %s}"
              view
              value))))
 
@@ -89,13 +108,13 @@
 (defun reveal-remote-clear ()
   "Clear the Reveal window."
   (interactive)
-  (reveal-remote--submit-command "'(clear-output)"))
+  (reveal-remote--eval-command "clear-output"))
 
 (defun reveal-remote-dispose ()
   "Disposes the Reveal window."
   (interactive)
   (when (y-or-n-p "Are you sure you want to dispose of the Reval window? ")
-    (reveal-remote--submit-command "'(dispose)")))
+    (reveal-remote--eval-command "dispose")))
 
 (defun reveal-remote-submit ()
   "Submit value at point to output panel.
@@ -104,8 +123,7 @@ Ignores, and thus prints, data that might be a valid reveal command map.
 NOTE: unless :env is set forms will be evaluated in the `vlaaad.reveal.ext',
 NOT the namespace of the buffer (this applies to all interactions but is most notable here)."
   (interactive)
-  (reveal-remote--submit-command
-   (format "'(submit %s)" (cider-last-sexp))))
+  (reveal-remote--eval-command "submit" (cider-last-sexp)))
 
 (defun reveal-remote-open-view-last-sexp ()
   "Open selected view with expression preceding point.
