@@ -40,7 +40,7 @@
 
 (require 'cider)
 
-;;; Customization
+;;; Customization:
 
 (defgroup reveal-remote nil
   "Reveal-remote functions and settings."
@@ -52,13 +52,18 @@
   :group 'reveal-remote
   :type  'string)
 
-(defcustom reveal-remote-mode-eval-in-buffer-ns t
+(defcustom reveal-remote-mode-eval-in-other-ns t
   "If non-nil (default), evaluates forms in the current buffer's namespace.
 
 By default, Reveal evaluates any forms it encounters in vlaaad.reveal.ext,
 which means that any unknown symbols will result in compile errors."
   :group 'reveal-remote
   :type  'boolean)
+
+(defcustom reveal-remote-other-ns "*ns*"  ; not sure how robust it is to rely on *ns*
+  "The namespace used when `reveal-remote-mode-eval-in-other-ns' is non-nil."
+  :group 'reveal-remote
+  :type  'string)
 
 (defcustom reveal-remote-views
   '("view:table"
@@ -79,7 +84,7 @@ which means that any unknown symbols will result in compile errors."
 (defun reveal-remote--eval-command (command &optional arg)
   "Evaluate the Reveal command form with `ARG' applied to `COMMAND'."
   (let* ((command-map (reveal-remote--build-command-map command arg))
-         (success-p   (cider-interactive-eval command-map)))  ; cider-interactive-eval returns nils on fail
+         (success-p   (cider-interactive-eval command-map)))  ; cider-interactive-eval nils on fail
     (when (not success-p)
       (error "Unable to send form.  Are you sure you are connected to an nrepl through CIDER in this buffer?"))))
 
@@ -88,7 +93,8 @@ which means that any unknown symbols will result in compile errors."
   (format "{:vlaaad.reveal/command '((requiring-resolve 'vlaaad.reveal.ext/%s) %s) %s}"
           command
           (or arg "")
-          (when reveal-remote-mode-eval-in-buffer-ns ":ns *ns*"))) ; not sure how robust it is to call *ns*
+          (when reveal-remote-mode-eval-in-other-ns
+            (format ":ns %s" reveal-remote-other-ns))))
 
 (reveal-remote--build-command-map "clear-window")
 
