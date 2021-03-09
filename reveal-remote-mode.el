@@ -3,7 +3,7 @@
 ;; Copyright © 2021
 
 ;; Author: Love Lagerkvist
-;; URL: https://github.com/motform/reveal-remote
+;; URL: https://github.com/motform/reveal-remote-mode
 ;; Version: 210308
 ;; Package-Requires: ((emacs "25.1"))
 ;; Created: 2021-03-08
@@ -34,19 +34,20 @@
 
 ;;; Code:
 
-(require 'cider-eval)
+(require 'cider)
 
 ;;; Customization
 
 (defgroup reveal-remote nil
   "Reveal-remote functions and settings."
-  :group 'tools
+  :group  'tools
   :prefix "reveal-remote-")
 
-(defcustom reveal-remote-mode-keymap-prefix (kbd "C-c C-r")
+(defcustom reveal-remote-mode-keymap-prefix (kbd "C-c C-a")
   "Reveal-remote keymap prefix."
   :group 'reveal-remote
-  :type 'string)
+  :type  'string)
+
 
 ;;; Internal:
 
