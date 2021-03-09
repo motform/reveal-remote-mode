@@ -55,8 +55,10 @@
     "view:line-chart"
     "view:scatter-chart"
     "view:color"
-    "view:value")
-  "Views to choose from." ; TODO
+    "view:value"
+    "java-bean"
+    "datafy")
+  "Available views in `reveal-remote-open-view'."
   :group 'reveal-remote
   :type  'list)
 
@@ -66,7 +68,17 @@
   "Submit map with key `:vlaaad.reveal/command' and COMMAND as val."
   (let ((form (format "{:vlaaad.reveal/command %s}" command)))
     (when (not (cider-interactive-eval form)) ; cider-interactive-eval returns nils on fail
-      (message "Unable to send form. Are you sure you are connected to an nrepl through CIDER in this buffer?"))))
+      (error "Unable to send form.  Are you sure you are connected to an nrepl through CIDER in this buffer?"))))
+
+(defun reveal-remote--open-view (value)
+  "Select and open view with VALUE."
+  (let ((view (completing-read "Select view: " reveal-remote-views nil :require-match)))
+    (reveal-remote--submit-command
+     (format "'(open-view {:fx/type action-view
+                           :action :vlaaad.reveal.action/%s
+                           :value %s})"
+             view
+             value))))
 
 ;;; Interactive:
 
@@ -85,27 +97,29 @@
   "Submit value at point to output panel.
 Ignores, and thus prints, data that might be a valid reveal command map.
 
-NOTE, unless :env is set forms will be evaluated in the `vlaaad.reveal.ext',
-NOT the namespace of the buffer."
+NOTE: unless :env is set forms will be evaluated in the `vlaaad.reveal.ext',
+NOT the namespace of the buffer (this applies to all interactions but is most notable here)."
   (interactive)
   (reveal-remote--submit-command
    (format "'(submit %s)" (cider-last-sexp))))
 
-(defun reveal-remote-open-view ()
-  "Open selected view with value at point.
+(defun reveal-remote-open-view-last-sexp ()
+  "Open selected view with expression preceding point.
 Add new views via `reveal-remote-views'.
 
-NOTE does not attempt to validate the view against the value,
+NOTE: does not attempt to validate the view against the value,
 meaning that you are able to trigger exceptions."
   (interactive)
-  (let ((view (completing-read "Select view: " reveal-remote-views nil :require-match))
-        (value (cider-last-sexp)))
-    (reveal-remote--submit-command
-     (format "'(open-view {:fx/type action-view
-                           :action :vlaaad.reveal.action/%s
-                           :value %s})"
-             view
-             value))))
+  (reveal-remote--open-view (cider-last-sexp)))
+
+(defun reveal-remote-open-view-defun-at-point ()
+  "Open selected view with the top level from.
+Add new views via `reveal-remote-views'.
+
+NOTE: does not attempt to validate the view against the value,
+meaning that you are able to trigger exceptions."
+  (interactive)
+  (reveal-remote--open-view (cider-defun-at-point)))
 
 ;;; Minor Mode:
 
