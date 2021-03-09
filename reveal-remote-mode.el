@@ -48,6 +48,17 @@
   :group 'reveal-remote
   :type  'string)
 
+(defcustom reveal-remote-views
+  '("view:table"
+    "view:pie-chart"
+    "view:bar-chart"
+    "view:line-chart"
+    "view:scatter-chart"
+    "view:color"
+    "view:value")
+  "Views to choose from." ; TODO
+  :group 'reveal-remote
+  :type  'list)
 
 ;;; Internal:
 
@@ -80,6 +91,22 @@ NOT the namespace of the buffer."
   (reveal-remote--submit-command
    (format "'(submit %s)" (cider-last-sexp))))
 
+(defun reveal-remote-open-view ()
+  "Open selected view with value at point.
+Add new views via `reveal-remote-views'.
+
+NOTE does not attempt to validate the view against the value,
+meaning that you are able to trigger exceptions."
+  (interactive)
+  (let ((view (completing-read "Select view: " reveal-remote-views nil :require-match))
+        (value (cider-last-sexp)))
+    (reveal-remote--submit-command
+     (format "'(open-view {:fx/type action-view
+                           :action :vlaaad.reveal.action/%s
+                           :value %s})"
+             view
+             value))))
+
 ;;; Minor Mode:
 
 (defvar reveal-remote-command-map
@@ -87,6 +114,7 @@ NOT the namespace of the buffer."
     (define-key map (kbd "l") #'reveal-remote-clear)
     (define-key map (kbd "q") #'reveal-remote-dispose)
     (define-key map (kbd "e") #'reveal-remote-submit)
+    (define-key map (kbd "v") #'reveal-remote-open-view)
     map)
   "Keymap for reveal-remote-mode commands after `reveal-remote-mode-keymap-prefix'.")
 (fset 'reval-remote-command-map reveal-remote-command-map)
