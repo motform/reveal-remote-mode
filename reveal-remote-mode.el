@@ -132,10 +132,11 @@ meaning that you are able to trigger exceptions."
     (define-key map (kbd "l") #'reveal-remote-clear)
     (define-key map (kbd "q") #'reveal-remote-dispose)
     (define-key map (kbd "e") #'reveal-remote-submit)
-    (define-key map (kbd "v") #'reveal-remote-open-view)
+    (define-key map (kbd "v") #'reveal-remote-open-view-last-sexp)
+    (define-key map (kbd "c") #'reveal-remote-open-view-defun-at-point)
     map)
   "Keymap for reveal-remote-mode commands after `reveal-remote-mode-keymap-prefix'.")
-(fset 'reval-remote-command-map reveal-remote-command-map)
+(fset 'reveal-remote-command-map reveal-remote-command-map)
 
 (defvar reveal-remote-mode-map
   (let ((map (make-sparse-keymap)))
