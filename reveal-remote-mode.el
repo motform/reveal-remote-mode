@@ -66,18 +66,18 @@ which means that any unknown symbols will result in compile errors."
   :type  'string)
 
 (defcustom reveal-remote-views
-  '("view:table"
-    "view:pie-chart"
-    "view:bar-chart"
-    "view:line-chart"
-    "view:scatter-chart"
-    "view:color"
-    "view:value"
-    "java-bean"
-    "datafy")
+  '(("view:table"         . ":vlaaad.reveal.action/view:table")
+    ("view:pie-chart"     . ":vlaaad.reveal.action/view:pie-chart")
+    ("view:bar-chart"     . ":vlaaad.reveal.action/view:bar-chart")
+    ("view:line-chart"    . ":vlaaad.reveal.action/view:line-chart")
+    ("view:scatter-chart" . ":vlaaad.reveal.action/view:scatter-chart")
+    ("view:color"         . ":vlaaad.reveal.action/view:color")
+    ("view:value"         . ":vlaaad.reveal.action/view:value")
+    ("java-bean"          . ":vlaaad.reveal.action/java-bean")
+    ("datafy"             . ":vlaaad.reveal.action/datafy"))
   "Available views in `reveal-remote-open-view'."
   :group 'reveal-remote
-  :type  'list)
+  :type  'alist)
 
 ;;; Internal:
 
