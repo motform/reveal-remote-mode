@@ -39,6 +39,7 @@
 ;;; Code:
 
 (require 'cider)
+(eval-when-compile (require 'subr-x))
 
 ;;; Customization:
 
@@ -96,17 +97,21 @@ which means that any unknown symbols will result in compile errors."
           (when reveal-remote-mode-eval-in-other-ns
             (format ":ns %s" reveal-remote-other-ns))))
 
-(reveal-remote--build-command-map "clear-window")
+(defun reveal-remote--alist-completing-read (alist msg)
+  "Prompt a `completing-read' of keys of ALIST with MSG and return associated val."
+  (thread-first (completing-read msg (mapcar 'car alist) nil :require-match)
+    (assoc alist)
+    cdr))
 
 (defun reveal-remote--open-view (value)
   "Select and open view with VALUE."
-  (let ((view (completing-read "Select view: " reveal-remote-views nil :require-match)))
+  (let ((action (reveal-remote--alist-completing-read reveal-remote-views "Select view: ")))
     (reveal-remote--eval-command
      "open-view"
      (format "{:fx/type  vlaaad.reveal.ext/action-view
-                :action  :vlaaad.reveal.action/%s
+                :action  %s
                 :value   %s}"
-             view
+             action
              value))))
 
 ;;; Interactive:
