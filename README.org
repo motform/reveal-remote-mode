@@ -1,5 +1,5 @@
 * reveal-remote-mode
-  reveal-remote-mode is an Emacs minor mode for remote controlling [[https://github.com/vlaaad/reveal][Reveal]], the "Read Eval /Visualize/ Loop" for Clojure. It leverages the [[https://vlaaad.github.io/reveal/#interacting-with-reveal-from-code][evaluated command form]] interface to afford the user convenient access to window control features and view opening. The package is still in an early state, so any feedback is appreciated.
+  reveal-remote-mode is an Emacs minor mode for remote controlling [[https://github.com/vlaaad/reveal][Reveal]], the "Read Eval Visualize Loop" for Clojure. It leverages the [[https://vlaaad.github.io/reveal/#interacting-with-reveal-from-code][evaluated command form]] interface to afford the user convenient access to window control features and view opening. The package is still in an early state, so any feedback is appreciated.
   
   The mode currently relies on [[https://github.com/clojure-emacs/cider][CIDER]] and has only been tested on JVM Clojure via nrepl. The goal is to make it compatible with [[https://github.com/clojure-emacs/inf-clojure][inf-clojure]] and other repls in the future.
 
@@ -16,6 +16,13 @@
      :hook (cider-mode . reveal-remote-mode))
    #+end_src
    
+** Adding Views
+   Adding views 
+
+   #+begin_src emacs-lisp
+   (add-to-list 'reveal-remote-views "view:new")
+   #+end_src
+
 ** Configuration
    reveal-remote-mode exposes two meaningful variables: the interrelated ~reveal-remote-mode-eval-in-other-ns~ and ~reveal-remote-other-ns~. By default Reveal evaluates the received form (and thus all sub forms) in the ~vlaaad.reveal.ext~ namespace, causing any unknown symbols to result in compile errors (as per regular Clojure semantics). We can configure this behavior using the ~:ns~ key, which reveal-remote-mode defaults to whatever is in ~*ns*~. Setting ~reveal-remote-mode-eval-in-other-ns~ allows you to toggle this behaviour (default ~t~), ~reveal-remote-other-ns~ allows you to specify the value of ~:ns~.
 
@@ -40,8 +47,9 @@
    | ~C-c C-a c~ | ~reveal-remote-open-view-defun-at-point~ |
    |-----------+----------------------------------------|
 
-** TODO
-  - Add a reasonable way to configure the ~:env~ key.
-  - Add view-type validation.
-  - Add an example of using a custom view.
-  - Add a .gif or screencast to persuade the kids.
+** TODO Roadmap
+   - Make sure that you can open a view on first go by requiring the correct things
+   - Add a reasonable way to configure the ~:env~ key.
+   - Add view-type validation.
+   - Add an example of using a custom view.
+   - Add a .gif or screencast to persuade the kids.

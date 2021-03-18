@@ -66,6 +66,11 @@ which means that any unknown symbols will result in compile errors."
   :group 'reveal-remote
   :type  'string)
 
+(defcustom reveal-remote-env nil
+  "If non nil, supplies its contents as a map under the :env key in the command."
+  :group 'reveal-remote
+  :type  'string)
+
 (defcustom reveal-remote-views
   '(("view:table"         . ":vlaaad.reveal.action/view:table")
     ("view:pie-chart"     . ":vlaaad.reveal.action/view:pie-chart")
@@ -91,11 +96,13 @@ which means that any unknown symbols will result in compile errors."
 
 (defun reveal-remote--build-command-map (command &optional arg)
   "Return the finished Reveal command map by setting flags, adding ARG and boilerplate to COMMAND."
-  (format "{:vlaaad.reveal/command '((requiring-resolve 'vlaaad.reveal.ext/%s) %s) %s}"
+  (format "{:vlaaad.reveal/command '((requiring-resolve 'vlaaad.reveal.ext/%s) %s) %s %s}"
           command
           (or arg "")
-          (when reveal-remote-mode-eval-in-other-ns
-            (format ":ns %s" reveal-remote-other-ns))))
+          (or (when reveal-remote-mode-eval-in-other-ns
+                (format ":ns %s" reveal-remote-other-ns)) "")
+          (or (when reveal-remote-env
+                (format ":env %s" reveal-remote-env)) "")))
 
 (defun reveal-remote--alist-completing-read (alist msg)
   "Prompt a `completing-read' of keys of ALIST with MSG and return associated val."
