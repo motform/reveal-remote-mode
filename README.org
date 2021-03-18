@@ -17,10 +17,10 @@
    #+end_src
    
 ** Adding Views
-   Adding views 
+   EXPERIMENTAL: Available views are set in the ~reveal-remote-views~ alist. reveal-remote expects the CAR of the pair to be user facing name (preferably the same one registered in Reveal) and the CDR to be the fully namespace qualified key under which the view was registered.
 
    #+begin_src emacs-lisp
-   (add-to-list 'reveal-remote-views "view:new")
+   (add-to-list 'reveal-remote-views '("view:new" . ":fully.qualified.namespace/key"))
    #+end_src
 
 ** Configuration
