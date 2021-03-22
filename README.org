@@ -32,7 +32,8 @@
    |-------------------------------------+------------------------------------------------------|
    | ~reveal-remote-mode-eval-in-other-ns~ | ~t~ (default), ~nil~                                     |
    | ~reveal-remote-other-ns~              | ~*ns*~ (default), any valid Clojure namespace (string) |
-   | ~reveal-remote-views~                 | The default Reveal views                             |
+   | ~reveal-remote-env~                   | any valid Clojure form (string), nil (default)       |
+   | ~reveal-remote-views~                 | Alist of Reveal views                                |
    |-------------------------------------+------------------------------------------------------|
 
 ** Keymap
