@@ -1,3 +1,5 @@
+*NOTE: CURRENTLY LIMITED TO CIDER*
+
 * reveal-remote-mode
   reveal-remote-mode is an Emacs minor mode for remote controlling [[https://github.com/vlaaad/reveal][Reveal]], the "Read Eval Visualize Loop" for Clojure. It leverages the [[https://vlaaad.github.io/reveal/#interacting-with-reveal-from-code][evaluated command form]] interface to afford the user convenient access to window control features and view opening. The package is still in an early state, so any feedback is appreciated.
   
@@ -17,11 +19,25 @@
    #+end_src
    
 ** Adding Views
-   EXPERIMENTAL: Available views are set in the ~reveal-remote-views~ alist. reveal-remote expects the CAR of the pair to be user facing name (preferably the same one registered in Reveal) and the CDR to be the fully namespace qualified key under which the view was registered.
+   Available views are set in the ~reveal-remote-views~ alist. reveal-remote expects the CAR of the pair to be user facing name (preferably the same one registered in Reveal) and the CDR to be the fully namespace qualified key under which the view was registered.
 
    #+begin_src emacs-lisp
    (add-to-list 'reveal-remote-views '("view:new" . ":fully.qualified.namespace/key"))
    #+end_src
+
+   For example, if one wanted to add [[https://github.com/phronmophobic/reveal-treemap][phronmophobic's reveal-treemap]], one would have to add the view to ~reveal-remote-views~, taking care to fully qualify the key:
+
+   #+begin_src emacs-lisp
+   (add-to-list 'reveal-remote-views '("treemap" . ":com.phronemophobic.reveal-treemap/treemap"))
+   #+end_src
+
+   Followed by requiring the namespace in your REPL:
+
+   #+begin_src clojure
+   (require 'com.phronemophobic.reveal-treemap)
+   #+end_src
+   
+   Doing this should populate the view's list with the now evaluated treemap, ready to inspect! 
 
 ** Configuration
    reveal-remote-mode exposes two meaningful variables: the interrelated ~reveal-remote-mode-eval-in-other-ns~ and ~reveal-remote-other-ns~. By default Reveal evaluates the received form (and thus all sub forms) in the ~vlaaad.reveal.ext~ namespace, causing any unknown symbols to result in compile errors (as per regular Clojure semantics). We can configure this behavior using the ~:ns~ key, which reveal-remote-mode defaults to whatever is in ~*ns*~. Setting ~reveal-remote-mode-eval-in-other-ns~ allows you to toggle this behaviour (default ~t~), ~reveal-remote-other-ns~ allows you to specify the value of ~:ns~.
@@ -48,9 +64,6 @@
    | ~C-c C-a c~ | ~reveal-remote-open-view-defun-at-point~ |
    |-----------+----------------------------------------|
 
-** TODO Roadmap
-   - Make sure that you can open a view on first go by requiring the correct things
-   - Add a reasonable way to configure the ~:env~ key.
+** Roadmap
    - Add view-type validation.
-   - Add an example of using a custom view.
    - Add a .gif or screencast to persuade the kids.

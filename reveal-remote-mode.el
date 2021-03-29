@@ -136,10 +136,7 @@ which means that any unknown symbols will result in compile errors."
 
 (defun reveal-remote-submit ()
   "Submit value at point to output panel.
-Ignores, and thus prints, data that might be a valid reveal command map.
-
-NOTE: unless :env is set forms will be evaluated in the `vlaaad.reveal.ext',
-NOT the namespace of the buffer (this applies to all interactions but is most notable here)."
+Ignores, and thus prints, data that might be a valid reveal command map."
   (interactive)
   (reveal-remote--eval-command "submit" (cider-last-sexp)))
 
