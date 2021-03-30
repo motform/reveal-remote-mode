@@ -14,7 +14,7 @@
 
    #+begin_src emacs-lisp
    (use-package reveal-remote
-     :straight (reveal-remote :type git :host github :repo "motform/reveal-remote")
+     :straight (reveal-remote :type git :host github :repo "motform/reveal-remote-mode")
      :hook (cider-mode . reveal-remote-mode))
    #+end_src
    
