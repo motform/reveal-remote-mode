@@ -53,7 +53,7 @@
   :group 'reveal-remote
   :type  'string)
 
-(defcustom reveal-remote-mode-eval-in-other-ns t
+(defcustom reveal-remote-eval-in-other-ns t
   "If non-nil (default), evaluates forms in the current buffer's namespace.
 
 By default, Reveal evaluates any forms it encounters in vlaaad.reveal.ext,
@@ -62,7 +62,7 @@ which means that any unknown symbols will result in compile errors."
   :type  'boolean)
 
 (defcustom reveal-remote-other-ns "*ns*"  ; not sure how robust it is to rely on *ns*
-  "The namespace used when `reveal-remote-mode-eval-in-other-ns' is non-nil."
+  "The namespace used when `reveal-remote-eval-in-other-ns' is non-nil."
   :group 'reveal-remote
   :type  'string)
 
@@ -99,7 +99,7 @@ which means that any unknown symbols will result in compile errors."
   (format "{:vlaaad.reveal/command '((requiring-resolve 'vlaaad.reveal.ext/%s) %s) %s %s}"
           command
           (or arg "")
-          (or (when reveal-remote-mode-eval-in-other-ns
+          (or (when reveal-remote-eval-in-other-ns
                 (format ":ns %s" reveal-remote-other-ns)) "")
           (or (when reveal-remote-env
                 (format ":env %s" reveal-remote-env)) "")))

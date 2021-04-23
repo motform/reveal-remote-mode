@@ -40,13 +40,13 @@
    Doing this should populate the view's list with the now evaluated treemap, ready to inspect! 
 
 ** Configuration
-   reveal-remote-mode exposes two meaningful variables: the interrelated ~reveal-remote-mode-eval-in-other-ns~ and ~reveal-remote-other-ns~. By default Reveal evaluates the received form (and thus all sub forms) in the ~vlaaad.reveal.ext~ namespace, causing any unknown symbols to result in compile errors (as per regular Clojure semantics). We can configure this behavior using the ~:ns~ key, which reveal-remote-mode defaults to whatever is in ~*ns*~. Setting ~reveal-remote-mode-eval-in-other-ns~ allows you to toggle this behaviour (default ~t~), ~reveal-remote-other-ns~ allows you to specify the value of ~:ns~.
+   reveal-remote-mode exposes two meaningful variables: the interrelated ~reveal-remote-eval-in-other-ns~ and ~reveal-remote-other-ns~. By default Reveal evaluates the received form (and thus all sub forms) in the ~vlaaad.reveal.ext~ namespace, causing any unknown symbols to result in compile errors (as per regular Clojure semantics). We can configure this behavior using the ~:ns~ key, which reveal-remote-mode defaults to whatever is in ~*ns*~. Setting ~reveal-remote-eval-in-other-ns~ allows you to toggle this behaviour (default ~t~), ~reveal-remote-other-ns~ allows you to specify the value of ~:ns~.
 
    In addition to these, there is also a list called ~reveal-remote-views~ that enumerates the possible Reveal views. This is the place where you would add custom views.
 
    | Variables                           | Values                                               |
    |-------------------------------------+------------------------------------------------------|
-   | ~reveal-remote-mode-eval-in-other-ns~ | ~t~ (default), ~nil~                                     |
+   | ~reveal-remote-eval-in-other-ns~ | ~t~ (default), ~nil~                                     |
    | ~reveal-remote-other-ns~              | ~*ns*~ (default), any valid Clojure namespace (string) |
    | ~reveal-remote-env~                   | any valid Clojure form (string), nil (default)       |
    | ~reveal-remote-views~                 | Alist of Reveal views                                |
