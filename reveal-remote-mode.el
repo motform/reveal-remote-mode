@@ -4,7 +4,7 @@
 
 ;; Author: Love Lagerkvist
 ;; URL: https://github.com/motform/reveal-remote-mode
-;; Version: 210309
+;; Version: 210423
 ;; Package-Requires: ((emacs "25.1") (clojure-mode "5.9") (cider "0.24.0"))
 ;; Created: 2021-03-08
 ;; Keywords: tools convenience clojure cider
@@ -115,7 +115,7 @@ which means that any unknown symbols will result in compile errors."
   (let ((action (reveal-remote--alist-completing-read reveal-remote-views "Select view: ")))
     (reveal-remote--eval-command
      "open-view"
-     (format "{:fx/type  vlaaad.reveal.ext/action-view
+     (format "{:fx/type  @(requiring-resolve 'vlaaad.reveal.ext/action-view)
                 :action  %s
                 :value   %s}"
              action
