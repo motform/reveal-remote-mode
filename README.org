@@ -58,7 +58,8 @@
    | Key       | Function                               |
    |-----------+----------------------------------------|
    | ~C-c C-a l~ | ~reveal-remote-clear~                    |
-   | ~C-c C-a q~ | ~reveal-remote-dispose~                  |
+   | ~C-c C-a q~ | ~reveal-remote-close-all-views~          |
+   | ~C-c C-a x~ | ~reveal-remote-dispose~                  |
    | ~C-c C-a e~ | ~reveal-remote-submit~                   |
    | ~C-c C-a v~ | ~reveal-remote-open-view-last-sexp~      |
    | ~C-c C-a c~ | ~reveal-remote-open-view-defun-at-point~ |

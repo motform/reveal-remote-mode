@@ -34,7 +34,7 @@
 ;; Currently requires CIDER and a pre-configured nrepl connection,
 ;; but my goal is to make this work with inf-clojure as well.
 ;;
-;; Tested against Reveal 1.3.196
+;; Tested against Reveal 1.3.209
 
 ;;; Code:
 
@@ -128,6 +128,11 @@ which means that any unknown symbols will result in compile errors."
   (interactive)
   (reveal-remote--eval-command "clear-output"))
 
+(defun reveal-remote-close-all-views ()
+  "Close all open Reveal views."
+  (interactive)
+  (reveal-remote--eval-command "close-all-views"))
+
 (defun reveal-remote-dispose ()
   "Disposes the Reveal window."
   (interactive)
@@ -163,7 +168,8 @@ meaning that you are able to trigger exceptions."
 (defvar reveal-remote-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "l") #'reveal-remote-clear)
-    (define-key map (kbd "q") #'reveal-remote-dispose)
+    (define-key map (kbd "q") #'reveal-remote-close-all-views)
+    (define-key map (kbd "x") #'reveal-remote-dispose)
     (define-key map (kbd "e") #'reveal-remote-submit)
     (define-key map (kbd "v") #'reveal-remote-open-view-last-sexp)
     (define-key map (kbd "c") #'reveal-remote-open-view-defun-at-point)
